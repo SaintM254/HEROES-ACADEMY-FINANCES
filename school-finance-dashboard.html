@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schoolwise – School Finance Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#dcdde3;--frame:#f0f0f1;--card:#fff;--ink:#111;--mute:#8b8d93;--line:#ececee;--blue:#1d4ed8;--blue-d:#1e3a8a;--blue-m:#93a9e6;--blue-l:#e8eefc;--ok:#16a34a;--warn:#d97706;--bad:#dc2626}
+*{box-sizing:border-box;margin:0}
+body{font-family:Outfit,system-ui,sans-serif;background:var(--bg);color:var(--ink);padding:clamp(8px,3vw,40px);font-size:14px}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.frame{max-width:1200px;margin:auto;background:var(--frame);border-radius:22px;padding:18px}
+.pill{background:var(--card);border-radius:999px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:20px;color:var(--blue-d)}
+.logo i{width:30px;height:30px;border-radius:50% 50% 50% 8px;background:var(--blue);display:grid;place-items:center;color:#fff;font-style:normal;font-size:15px}
+nav{background:var(--frame);border-radius:999px;padding:6px;display:flex;gap:2px}
+nav button{padding:9px 18px;border-radius:999px;color:#444}
+nav button.on{background:var(--card);color:var(--ink);font-weight:500}
+.tools{display:flex;gap:10px;align-items:center}
+.ic{width:40px;height:40px;border-radius:50%;background:var(--frame);display:grid;place-items:center}
+.av{width:36px;height:36px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:500;font-size:13px}
+.head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:30px 0 20px 68px}
+h1{font-size:clamp(26px,4vw,36px);font-weight:500;letter-spacing:-.5px}
+h1 span{color:var(--mute)}
+.chips{display:flex;gap:10px}
+.chip{padding:12px 18px;display:flex;gap:8px;align-items:center}
+.layout{display:grid;grid-template-columns:56px 1fr;gap:12px}
+.rail{display:flex;flex-direction:column;gap:12px}
+.rail div{background:var(--card);border-radius:999px;padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:6px}
+.rail button{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#444}
+.rail button.on{background:var(--blue);color:#fff}
+.rail .end{margin-top:auto}
+svg.i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr) minmax(0,1fr);gap:12px}
+.card{background:var(--card);border-radius:22px;padding:18px}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.ch b{font-weight:500;font-size:15px;display:block}
+.ch small,.sub{color:var(--mute);font-size:12px}
+.arrow{width:38px;height:38px;border-radius:50%;background:var(--frame);display:grid;place-items:center}
+.fee{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;border-radius:16px;padding:18px;height:160px;display:flex;flex-direction:column;justify-content:space-between}
+.fee .big{font-size:30px;font-weight:400}
+.fee .r{display:flex;justify-content:space-between;font-size:12px;opacity:.85}
+.fee .tag{font-weight:600;font-style:italic;font-size:16px}
+.stack{display:grid;gap:12px;grid-template-rows:auto auto}
+.wk{display:flex;justify-content:space-between;align-items:center}
+.wk b{font-size:26px;font-weight:500;display:block;margin-top:4px}
+.badge{background:var(--blue-l);color:var(--blue);padding:5px 10px;border-radius:999px;font-size:11px;font-weight:500}
+.seg{background:var(--frame);border-radius:999px;padding:4px;display:flex}
+.seg button{padding:8px 16px;border-radius:999px;font-size:13px;color:#555}
+.seg button.on{background:var(--blue);color:#fff}
+.bars{display:flex;align-items:flex-end;gap:10px;height:230px;padding-left:34px;position:relative;margin-top:20px}
+.bars:before{content:"";position:absolute;inset:0 0 22px 34px;background:repeating-linear-gradient(to top,transparent 0 calc(20% - 1px),var(--line) calc(20% - 1px) 20%)}
+.y{position:absolute;left:0;top:0;bottom:22px;display:flex;flex-direction:column-reverse;justify-content:space-between;font-size:11px;color:var(--mute);transform:translateY(7px)}
+.col{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;position:relative;z-index:1}
+.col span{font-size:11px;color:var(--mute)}
+.col .b{width:100%;max-width:46px;border-radius:999px;background:repeating-linear-gradient(135deg,var(--blue-m) 0 2px,#b7c6ef 2px 5px);transition:height .5s,background .2s;cursor:pointer;position:relative}
+.col .b.on{background:repeating-linear-gradient(135deg,var(--blue-d) 0 2px,var(--blue) 2px 5px)}
+.col .b.on:after{content:attr(data-v);position:absolute;top:-30px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;font-size:11px;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.bal{text-align:center}
+.bal strong{font-size:32px;font-weight:500;display:block}
+.bal strong em{font-style:normal;color:var(--mute)}
+.area{display:block;width:calc(100% + 36px);margin:10px -18px -18px;height:120px}
+.sr{display:flex;justify-content:center;margin-top:-30px;position:relative}
+.sr .seg{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.sr .seg button{padding:8px 20px}
+table{width:100%;border-collapse:collapse}
+th{font-weight:400;color:var(--mute);text-align:left;font-size:12px;padding:0 8px 10px}
+td{padding:11px 8px;font-size:13px;border-radius:0}
+tbody tr:hover{background:var(--frame)}
+.who{display:flex;align-items:center;gap:10px}
+.dot{width:34px;height:34px;border-radius:50%;background:var(--blue-l);color:var(--blue);display:grid;place-items:center;font-size:12px;font-weight:500}
+.who small{display:block;color:var(--ok);font-size:11px}
+.st:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;background:currentColor}
+.paid{color:var(--ok)}.pend{color:var(--warn)}.over{color:var(--bad)}
+.st{color:inherit}.st span{color:var(--ink)}
+.cred{font-size:34px;font-weight:500;margin:6px 0 14px;display:flex;align-items:center;gap:8px}
+.cred em{font-style:normal;color:var(--mute)}
+.cred .badge{font-size:11px}
+.mini{background:var(--frame);border-radius:16px;padding:14px}
+.mini b{font-weight:500;display:block}
+.faces{display:flex;margin-top:12px}
+.faces i{width:38px;height:38px;border-radius:50%;border:2px solid var(--frame);margin-right:-6px;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:500;color:#fff}
+.faces i:last-child{background:var(--blue);margin-left:2px}
+.bottom{grid-column:1/3}
+@media(max-width:1000px){.grid{grid-template-columns:1fr 1fr}.bottom{grid-column:1/-1}}
+@media(max-width:720px){.layout{grid-template-columns:1fr}.rail{flex-direction:row;overflow:auto}.rail div{flex-direction:row;padding:0 8px}.rail .end{margin:0}.head{padding-left:0}.grid{grid-template-columns:1fr}nav{display:none}.tools .ic{display:none}.table-w{overflow-x:auto}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="frame">
+ <header class="top pill">
+  <div class="logo"><i>S</i>Schoolwise</div>
+  <nav id="nav"><button class="on">Dashboard</button><button>Fees</button><button>Payroll</button><button>Expenses</button><button>Reports</button></nav>
+  <div class="tools"><button class="ic" aria-label="Search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><button class="ic" aria-label="Notifications"><svg class="i" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7M10 20a2 2 0 0 0 4 0"/></svg></button><div class="av">AM</div></div>
+ </header>
+
+ <div class="head">
+  <h1>Welcome back, <span>Ms. Amani</span></h1>
+  <div class="chips">
+   <div class="chip pill"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Term 2 · 1 Sep – 12 Dec 2026</div>
+   <button class="chip pill"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Record payment</button>
+  </div>
+ </div>
+
+ <div class="layout">
+  <aside class="rail">
+   <div><button class="on" aria-label="Overview"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg></button><button aria-label="Analytics"><svg class="i" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></button><button aria-label="Students"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-4 3-6 6.5-6s6 2 6.5 6M17 5a3 3 0 0 1 0 6M21.5 20c-.3-2.5-1.5-4-3.5-5"/></svg></button><button aria-label="Invoices"><svg class="i" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/></svg></button></div>
+   <div><button aria-label="Wallets"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M16 12.5h2"/></svg></button><button aria-label="Messages"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg></button><button aria-label="Scholarships"><svg class="i" viewBox="0 0 24 24"><path d="M19 5 5 19"/><circle cx="7" cy="7" r="2"/><circle cx="17" cy="17" r="2"/></svg></button></div>
+   <div class="end"><button aria-label="Settings"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></button><button aria-label="Log out"><svg class="i" viewBox="0 0 24 24"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg></button></div>
+  </aside>
+
+  <main class="grid">
+   <section class="stack">
+    <div class="card">
+     <div class="ch"><div><b>Fee collection goal</b><small>Term 2 target</small></div><button class="arrow" aria-label="Open"><svg class="i" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></button></div>
+     <div class="fee"><div class="r"><span class="tag">Collected</span><span>Term 2</span></div><div><div class="r" style="margin-bottom:4px"><span>Fees received</span></div><div class="big">$ 78,989.09</div></div><div class="r"><span>of $ 112,000 · 70%</span><span>Due 30 Nov</span></div></div>
+    </div>
+    <div class="card wk"><div><span class="sub">Weekly collections</span><b>+3,945 USD</b></div><span class="badge">+12.8%</span></div>
+   </section>
+
+   <section class="card">
+    <div class="ch" style="align-items:center"><div style="display:flex;gap:12px;align-items:center"><div class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18"/></svg></div><b>Fee collection</b></div>
+     <div style="display:flex;gap:10px;align-items:center"><div class="seg" id="seg"><button data-k="m">Monthly</button><button data-k="t" class="on">By term</button></div></div></div>
+    <div class="bars" id="bars"></div>
+   </section>
+
+   <section class="stack">
+    <div class="card" style="overflow:hidden">
+     <div class="ch"><div><b>School balance</b><small>Total across accounts</small></div><button class="arrow" aria-label="Open"><svg class="i" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></button></div>
+     <div class="bal"><small class="sub">Total balance</small><strong>$32,678<em>.90</em></strong></div>
+     <svg class="area" viewBox="0 0 400 120" preserveAspectRatio="none"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d4ed8" stop-opacity=".25"/><stop offset="1" stop-color="#1d4ed8" stop-opacity="0"/></linearGradient></defs><path d="M0 85 C30 90 40 60 70 45 S110 80 140 60 S185 20 215 38 S250 90 275 82 S320 35 350 42 S385 30 400 28 V120 H0Z" fill="url(#g)"/><path d="M0 85 C30 90 40 60 70 45 S110 80 140 60 S185 20 215 38 S250 90 275 82 S320 35 350 42 S385 30 400 28" fill="none" stroke="#1d4ed8" stroke-width="2"/></svg>
+     <div class="sr"><div class="seg"><button class="on" style="background:var(--blue);color:#fff">Collect ↑</button><button>Refund ↓</button></div></div>
+     <div style="height:22px"></div>
+    </div>
+    <div class="card">
+     <div style="display:flex;gap:12px;align-items:center"><div class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18"/></svg></div><div><b style="font-weight:500">Outstanding fees</b><small class="sub" style="display:block">Unpaid across 41 students</small></div></div>
+     <div class="cred">$8,945<em>.89</em><span class="badge">−4.2%</span></div>
+     <div class="mini"><b>Payroll due</b><small class="sub">Staff salaries · 28 Nov</small>
+      <div class="faces"><i style="background:#3b82f6">JK</i><i style="background:#0ea5e9">LO</i><i style="background:#6366f1">NW</i><i style="background:#1e3a8a">TM</i><i>+24</i></div></div>
+    </div>
+   </section>
+
+   <section class="card bottom">
+    <div class="ch"><div><b>Payment history</b><small>Recent fee payments</small></div><button class="arrow" aria-label="Open"><svg class="i" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></button></div>
+    <div class="table-w"><table>
+     <thead><tr><th>Student</th><th>Date</th><th>Fee type</th><th>Status</th><th>Amount</th></tr></thead>
+     <tbody id="rows"></tbody>
+    </table></div>
+   </section>
+  </main>
+ </div>
+</div>
+
+<script>
+var data={
+ t:{labels:["T1 '25","T2 '25","T3 '25","T1 '26","T2 '26","T3 '26"],vals:[3100,4400,3400,5000,3900,4600],on:3,max:5000},
+ m:{labels:["Jul","Aug","Sep","Oct","Nov","Dec"],vals:[1200,2800,4800,3600,2300,3100],on:2,max:5000}
+};
+var bars=document.getElementById("bars");
+function draw(k){
+ var d=data[k],h='<div class="y"><span>0</span><span>1k</span><span>2k</span><span>3k</span><span>4k</span><span>5k</span></div>';
+ d.vals.forEach(function(v,i){
+  h+='<div class="col"><div class="b'+(i===d.on?' on':'')+'" data-v="$'+v.toLocaleString()+'" data-i="'+i+'" style="height:'+(v/d.max*100*.9)+'%" tabindex="0" role="img" aria-label="'+d.labels[i]+': $'+v+'"></div><span>'+d.labels[i]+'</span></div>';
+ });
+ bars.innerHTML=h;
+}
+bars.addEventListener("click",function(e){
+ var b=e.target.closest(".b");if(!b)return;
+ bars.querySelectorAll(".b").forEach(function(x){x.classList.remove("on")});b.classList.add("on");
+});
+document.getElementById("seg").addEventListener("click",function(e){
+ var b=e.target.closest("button");if(!b)return;
+ this.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});b.classList.add("on");draw(b.dataset.k);
+});
+document.getElementById("nav").addEventListener("click",function(e){
+ var b=e.target.closest("button");if(!b)return;
+ this.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});b.classList.add("on");
+});
+var pay=[["Grace Wanjiru","Gr 7","12 Nov 2026","Tuition – Term 2","paid","Paid","2,450.00"],["Daniel Otieno","Gr 5","11 Nov 2026","Transport","paid","Paid","380.00"],["Amina Hassan","Gr 9","10 Nov 2026","Tuition – Term 2","pend","Pending","1,200.00"],["Brian Mwangi","Gr 3","08 Nov 2026","Lunch plan","over","Overdue","215.50"]];
+document.getElementById("rows").innerHTML=pay.map(function(p){
+ var ini=p[0].split(" ").map(function(w){return w[0]}).join("");
+ return '<tr><td><div class="who"><div class="dot">'+ini+'</div><div>'+p[0]+'<small>'+p[1]+'</small></div></div></td><td>'+p[2]+'</td><td>'+p[3]+'</td><td class="st '+p[4]+'"><span>'+p[5]+'</span></td><td>'+p[6]+' USD</td></tr>';
+}).join("");
+draw("t");
+</script>
+</body>
+</html>
