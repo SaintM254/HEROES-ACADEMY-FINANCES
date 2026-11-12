@@ -36,7 +36,7 @@ For production use with real learner or staff data, add authenticated server-sid
 
 ## Automatic deployment
 
-The repository includes a GitHub Actions workflow at `.github/workflows/deploy.yml`. On changes to `main`, it installs dependencies, runs syntax and browser checks, builds the static site and deploys the `dist/` folder to GitHub Pages. Pull requests run the validation job without deploying.
+The repository includes a GitHub Actions workflow at `.github/workflows/deploy.yml`. GitHub Pages must use **GitHub Actions** as its publishing source. On changes to `main`, the workflow installs dependencies, runs syntax and browser checks, builds the static site and deploys the `dist/` folder to GitHub Pages. Pull requests run the validation job without deploying.
 
 The published app has no runtime package dependencies and makes no external font or API requests. All application files, styles, crest images and the Outfit font are served from the site itself.
 
