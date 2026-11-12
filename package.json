@@ -1,0 +1,17 @@
+{
+  "name": "aic-academy-shanzu",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "AIC Academy Shanzu — a responsive Kenyan school workspace",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "playwright test",
+    "check": "node --check data.js && node --check app.js && node --check actions.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@sparticuz/chromium": "153.0.0"
+  }
+}

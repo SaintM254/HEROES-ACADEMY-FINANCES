@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en-KE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#022269">
+  <meta name="description" content="AIC Academy Shanzu school workspace. Fees, learners, CBC assessments, attendance, payroll and school operations in one place.">
+  <title>AIC Academy Shanzu · School Workspace</title>
+  <link rel="icon" type="image/svg+xml" href="assets/crest-mark.svg">
+  <link rel="preload" href="assets/outfit-variable.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="data.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="actions.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="workspace">
+    <header class="topbar">
+      <button class="icon-button mobile-menu" data-action="mobile-menu" aria-label="Open navigation" aria-expanded="false" data-icon="menu"></button>
+      <a class="brand" href="#overview" aria-label="AIC Academy Shanzu — overview">
+        <img src="assets/crest-mark.svg" alt="" width="48" height="48">
+        <span>AIC Academy <strong>Shanzu</strong><small>LEARN. GROW. THRIVE.</small></span>
+      </a>
+      <div class="universal-search">
+        <span data-icon="search" aria-hidden="true"></span>
+        <input id="global-search" type="search" placeholder="Search students, payments, pages…" autocomplete="off" role="combobox" aria-label="Search the school workspace" aria-expanded="false" aria-controls="search-results" aria-autocomplete="list">
+        <kbd aria-hidden="true">⌘ K</kbd>
+        <div id="search-results" class="search-results" role="listbox" aria-label="Search results" hidden></div>
+      </div>
+      <div class="header-tools">
+        <div class="notification-wrap">
+          <button class="icon-button" id="notification-button" data-action="notifications" aria-label="Notifications" aria-expanded="false"><span data-icon="bell"></span><i class="notification-dot" id="notification-dot"></i></button>
+          <div class="notification-panel popover" id="notifications" hidden></div>
+        </div>
+        <a class="icon-button" href="#settings" aria-label="Open settings" title="Settings"><span data-icon="settings"></span></a>
+        <a class="avatar" href="#settings" aria-label="Administrator profile" id="profile-avatar">AM</a>
+      </div>
+    </header>
+    <div class="context-bar"><span><i class="live-dot"></i> School workspace <span class="context-divider">/</span> <span id="context-term">Term 3 · 2026</span></span><span class="demo-label"><span data-icon="shield"></span> Demo · saved on this device</span></div>
+    <div class="app-layout">
+      <div class="sidebar-backdrop" data-action="close-mobile"></div>
+      <aside class="sidebar" aria-label="School navigation">
+        <div class="sidebar-heading"><span class="nav-label">WORKSPACE</span><button class="collapse-button" data-action="collapse-sidebar" aria-label="Collapse navigation" aria-expanded="true"><span data-icon="panel"></span></button></div>
+        <nav id="sidebar-nav"></nav>
+        <div class="sidebar-footer"><img src="assets/crest-mark.svg" alt="" width="32" height="32"><div class="nav-label"><b>Education is key to success</b><small>Shanzu, Mombasa · Kenya</small></div></div>
+      </aside>
+      <main id="main" tabindex="-1"></main>
+    </div>
+    <footer class="workspace-footer"><span>AIC Academy Shanzu <span>·</span> Built around your school.</span><span>All amounts in Kenyan shillings (KSh)</span></footer>
+  </div>
+  <dialog id="modal" aria-labelledby="modal-title"><div class="modal-header"><div><span class="eyebrow" id="modal-eyebrow">AIC ACADEMY SHANZU</span><h2 id="modal-title"></h2></div><button class="icon-button" data-action="close-modal" aria-label="Close dialog"><span data-icon="x"></span></button></div><div id="modal-content"></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <section id="print-area" aria-hidden="true"></section>
+  <noscript><div class="noscript">Please enable JavaScript to use this school workspace. No account or installation is needed.</div></noscript>
+</body>
+</html>
