@@ -1,0 +1,11 @@
+import { mkdir, copyFile, writeFile, access } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { execFileSync } from 'node:child_process';
+const root=resolve(import.meta.dirname,'..'),dist=resolve(root,'dist');
+const files=['index.html','data.js','app.js','actions.js','assets/styles.css','assets/crest.svg','assets/crest-mark.svg','assets/outfit-variable.ttf','assets/OFL.txt'];
+for(const file of files)await access(resolve(root,file));
+for(const file of ['data.js','app.js','actions.js'])execFileSync(process.execPath,['--check',resolve(root,file)],{stdio:'inherit'});
+await mkdir(resolve(dist,'assets'),{recursive:true});
+for(const file of files)await copyFile(resolve(root,file),resolve(root,'dist',file));
+await writeFile(resolve(dist,'.nojekyll'),'');
+console.log(`Built ${files.length} static files. No runtime dependencies or external font requests.`);
