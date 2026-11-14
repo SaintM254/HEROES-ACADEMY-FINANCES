@@ -160,3 +160,27 @@ test('notifications, reset confirmation and unknown routes are handled',async({p
   await goto(page,'settings');await page.getByRole('button',{name:'Restore sample workspace',exact:true}).click();await page.locator('#f-confirm').fill('RESET');await page.getByRole('button',{name:'Restore sample data',exact:true}).click();expect((await readState(page)).settings.admin).toBe('Ms. Amani Mwangi');
   await page.goto('/#missing-page');await expect(page.locator('h1')).toHaveText('Page not found');
 });
+
+test('secondary text remains readable on desktop and mobile',async({page})=>{
+  // WCAG relative luminance, for the solid surfaces used by these labels.
+  const contrast=async(selector,background,pseudo=null)=>page.locator(selector).first().evaluate((el,{background,pseudo})=>{
+    const rgb=value=>value.match(/[\d.]+/g).slice(0,3).map(Number);
+    const luminance=values=>values.map(v=>v/255).map(v=>v<=0.04045?v/12.92:((v+0.055)/1.055)**2.4).reduce((sum,v,i)=>sum+v*[0.2126,0.7152,0.0722][i],0);
+    const text=luminance(rgb(getComputedStyle(el,pseudo).color));
+    const bg=luminance(rgb(getComputedStyle(document.querySelector(background)).backgroundColor));
+    return (Math.max(text,bg)+0.05)/(Math.min(text,bg)+0.05);
+  },{background,pseudo});
+  for(const width of [1440,390]){
+    await page.setViewportSize({width,height:900});
+    await goto(page,'overview');
+    for(const [selector,bg,pseudo] of [['.context-bar','.workspace'],['.page-heading p','.workspace'],['.page-heading h1 span','.workspace'],['.card-header p','.card'],['.chart-axis','.card'],['#global-search','.universal-search','::placeholder']]){
+      expect(await contrast(selector,bg,pseudo),selector+' at '+width).toBeGreaterThanOrEqual(4.5);
+    }
+    for(const selector of ['.context-bar','.page-heading p','.card-header p','.chart-axis','#global-search']){
+      expect(parseFloat(await page.locator(selector).first().evaluate(el=>getComputedStyle(el).fontSize)),selector+' at '+width).toBeGreaterThanOrEqual(12);
+    }
+    if(width===390) await page.getByRole('button',{name:'Open navigation'}).click();
+    expect(await contrast('.nav-group-toggle','.workspace')).toBeGreaterThanOrEqual(4.5);
+    expect(await contrast('.nav-item:not(.active)','.workspace')).toBeGreaterThanOrEqual(4.5);
+  }
+});
